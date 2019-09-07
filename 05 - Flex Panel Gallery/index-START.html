@@ -74,6 +74,12 @@
     .panel > *:last-child { transform: translateY(100%);}
     .panel.open-active > *:last-child { transform: translateY(0);}
 
+
+    .panel.open { /*tell area to expand 5x*/
+      flex: 5;
+      font-size: 40px;
+    }
+
     .panel p {
       text-transform: uppercase;
       font-family: 'Amatic SC', cursive;
@@ -121,6 +127,20 @@
   </div>
 
   <script>
+const panels = document.querySelectorAll('.panel');
+
+function toggleOpen() {
+  this.classList.toggle('open');
+}
+
+function toggleActive(e) {
+  if(e.propertyName.includes('flex')) {
+    this.classList.toggle('open-active');
+  }
+}
+
+  panels.forEach(panel => panel.addEventListener('click', toggleOpen));
+  panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
 
   </script>
 
