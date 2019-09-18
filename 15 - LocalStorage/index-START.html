@@ -67,12 +67,13 @@
 
 
  //this function is confusing to me
+ //this keeps checked items checked even on refresh
   function toggleDone(e){
     if (!e.target.matches('input')) return; //event delegation listen for a click - check if its what we want
     const el = e.target;
     const index = el.dataset.index;
-    items[index].done = !items[index].done;
-    localStorage.setItem('items', JSON.stringify(items));
+    items[index].done = !items[index].done; //flip flop true and false???
+    localStorage.setItem('items', JSON.stringify(items)); //add to local storage
 
   }
 
