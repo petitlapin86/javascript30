@@ -65,8 +65,20 @@
   }).join(''); //take array that map makes and turn it into one BIG string
   }
 
-  //call addItems function
+
+ //this function is confusing to me
+  function toggleDone(e){
+    if (!e.target.matches('input')) return; //event delegation listen for a click - check if its what we want
+    const el = e.target;
+    const index = el.dataset.index;
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+
+  }
+
+  //call functions to make them run
   addItems.addEventListener('submit', addItem); //listening for a submit (similar to listening for a click)
+  itemsList.addEventListener('click', toggleDone);
 
  //call pupulateList function
  populateList(items, itemsList);
