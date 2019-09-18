@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!--local storage is a list of text that has been saved by the domain-->
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -26,13 +28,51 @@
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+  const addItems = document.querySelector('.add-items'); //this is selecting the form element
+  const itemsList = document.querySelector('.plates'); //selecting plates
+  const items = JSON.parse(localStorage.getItem('items')) || []; //try to get from local storage if it isnt there fall back to an empty array
+
+  //create addItems function
+  function addItem(e){ //with event as the argument
+    e.preventDefault(); //by default the page would reload
+    const text = (this.querySelector(`[name=item]`)).value; //look inside form tag for name attribute - basically pull the user input name from the form
+    const item = {
+      text: text, //es6 shorthand you could just write text
+      done: false
+    };
+    items.push(item); //push the items to the array
+    pupulateList(items, itemsList); //EVERYTIME WE add an item we call this function which creates a list item with a label inside of it
+    localStorage.setItem('items', JSON.stringify(items)); //items is what were naming the key for local storage
+    //you may only use strings in local storage
+    //when you try to put something other than a string in local storage it will try (and fail to convert it)
+    // to work around this we are wrapping in JSON.stringify()
+    //you can also getItem or removeItem
+    this.reset(); //resetting the form element
+  }
+
+  //trying to make this a reusable function so that it could work beyond just the specific items above
+  //populate the list
+  function populateList(plates = [], platesList) { //set the default as an empty object
+  platesList.innerHTML = plates.map((plate, i) => { //loop over each item in array, return a string for each one
+    //line 53 creates a checkbox, plate.done is using a ternirary operator - if it equals done then it gets checked, otherwise do nothing
+    return `
+    <li>
+    <input type='checkbox' data-index=${i} id="item${i}" ${plate.done ?
+    'checked' : ''} />
+    <label for= "item${i}">${plate.text}</label>
+    </li>
+    `;
+  }).join(''); //take array that map makes and turn it into one BIG string
+  }
+
+  //call addItems function
+  addItems.addEventListener('submit', addItem); //listening for a submit (similar to listening for a click)
+
+ //call pupulateList function
+ populateList(items, itemsList);
 
 </script>
 
 
 </body>
 </html>
-
