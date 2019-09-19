@@ -43,6 +43,8 @@
   </div>
 
   <script>
+
+  //debounce will limit the number of times that checkslide is run
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -58,6 +60,32 @@
       };
     }
 
+    //create a variable called sliderImage
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide(e) {
+      sliderImages.forEach(sliderImage => { //iterate over each image
+        // halfway through the image
+        const SlideInAt = (window.scrollY + window.innerHeight) -
+        slideImage.height / 2;
+        // bottom of the image
+        const imageBottom =sliderImage.offsetTop + sliderImage.height;
+
+
+        const isHalfShown = SlideInAt > sliderImage.offsetTop;
+        //check if we are not scrolled fully past image
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        if (isHalfShown && isNotScrolledPast) {
+          sliderImage.classList.add('active');
+            }
+            else {
+              sliderImage.classList.remove('active');
+            }
+      });
+    }
+
+    window.addEventListener('scroll', debounce(checkSlide));
+
   </script>
 
   <style>
@@ -68,11 +96,11 @@
       font-size: 20px;
       font-weight: 200;
     }
-    
+
     body {
       margin: 0;
     }
-    
+
     *, *:before, *:after {
       box-sizing: inherit;
     }
@@ -107,7 +135,7 @@
     .align-left.slide-in {
       transform: translateX(-30%) scale(0.95);
     }
-    
+
     .align-right.slide-in {
       transform: translateX(30%) scale(0.95);
     }
